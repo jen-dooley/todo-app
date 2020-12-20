@@ -31,14 +31,20 @@ export default {
     '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
+    '@nuxtjs/moment',
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
   modules: ['@nuxtjs/axios'],
 
-  publicRuntimeConfig: {
-    axios: {
-      baseURL: 'https://todo.powerspike.gg',
+  axios: {
+    baseURL: process.env.API_URL,
+    headers: {
+      common: {
+        Authorization: process.env.AUTH_KEY,
+        /* Had to send data using this header or FormData since I was getting a CORS error when trying to send JSON data */
+        'Content-Type': 'multipart/form-data',
+      },
     },
   },
 
@@ -46,16 +52,17 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
+      dark: false, // set default to light
       themes: {
+        light: {
+          primary: colors.indigo.darken1,
+          secondary: colors.deepPurple.accent1,
+          accent: colors.green.lighten2,
+        },
         dark: {
-          primary: colors.blue.darken2,
-          accent: colors.grey.darken3,
-          secondary: colors.amber.darken3,
-          info: colors.teal.lighten1,
-          warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
-          success: colors.green.accent3,
+          primary: colors.teal.darken2,
+          secondary: colors.green.lighten2,
+          accent: colors.deepPurple.accent1,
         },
       },
     },

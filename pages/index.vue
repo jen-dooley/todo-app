@@ -1,93 +1,103 @@
 <template>
   <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
-      <div class="text-center">
-        <logo />
-        <vuetify-logo />
-      </div>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-text>
-          <p>
-            Vuetify is a progressive Material Design component framework for
-            Vue.js. It was designed to empower developers to create amazing
-            applications.
-          </p>
-          <p>
-            For more information on Vuetify, check out the
-            <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              documentation </a
-            >.
-          </p>
-          <p>
-            If you have questions, please join the official
-            <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="chat"
-            >
-              discord </a
-            >.
-          </p>
-          <p>
-            Find a bug? Report it on the github
-            <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="contribute"
-            >
-              issue board </a
-            >.
-          </p>
-          <p>
-            Thank you for developing with Vuetify and I look forward to bringing
-            more exciting features in the future.
-          </p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3" />
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt Documentation
-          </a>
-          <br />
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt GitHub
-          </a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn color="primary" nuxt to="/inspire"> Continue </v-btn>
-        </v-card-actions>
+    <v-col cols="12" sm="8">
+      <v-card elevation="3">
+        <v-toolbar color="primary" elevation="0" dark>
+          <v-toolbar-title v-if="$vuetify.breakpoint.smAndUp" class="mr-6">
+            Todo Items
+          </v-toolbar-title>
+          <v-text-field
+            v-model="searchValue"
+            label="Search"
+            prepend-icon="mdi-magnify"
+            hide-details
+            color="white"
+          ></v-text-field>
+          <v-spacer></v-spacer>
+          <v-dialog v-model="formOpen" width="500">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn fab x-small color="secondary" v-bind="attrs" v-on="on">
+                <v-icon>mdi-plus</v-icon>
+              </v-btn>
+            </template>
+            <v-card>
+              <v-card-title v-text="formTitle" />
+              <v-card-text>
+                <todo-form
+                  :item="editItem"
+                  class="mt-3"
+                  @create="createTodo"
+                  @update="updateTodo"
+                ></todo-form>
+              </v-card-text>
+            </v-card>
+          </v-dialog>
+        </v-toolbar>
+        <v-progress-linear
+          :value="todoCompletion"
+          color="secondary"
+          height="10"
+        >
+        </v-progress-linear>
+        <todo-list :items="filteredItems" @edit-item="openEdit"></todo-list>
       </v-card>
     </v-col>
   </v-row>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-import VuetifyLogo from '~/components/VuetifyLogo.vue'
+import TodoList from '@/components/TodoList'
+import TodoForm from '@/components/TodoForm'
+
+import { mapState, mapGetters } from 'vuex'
 
 export default {
-  components: {
-    Logo,
-    VuetifyLogo,
+  name: 'HomePage',
+  components: { TodoForm, TodoList },
+  async fetch() {
+    await this.$store.dispatch('fetchTodos')
+  },
+  data() {
+    return {
+      editItem: undefined,
+      formOpen: false,
+      searchValue: undefined,
+    }
+  },
+  computed: {
+    filteredItems() {
+      if (this.searchValue) {
+        return this.todoItems.filter((item) => {
+          if (
+            item.title.toLowerCase().includes(this.searchValue.toLowerCase()) ||
+            item.content.toLowerCase().includes(this.searchValue.toLowerCase())
+          ) {
+            return item
+          }
+        })
+      }
+      return this.todoItems
+    },
+    formTitle() {
+      return this.editItem ? 'Edit Todo' : 'Create Todo'
+    },
+    ...mapState({ todoItems: (state) => state.todos }),
+    ...mapGetters(['todoCompletion']),
+  },
+  methods: {
+    openEdit(item) {
+      this.editItem = item
+      this.formOpen = true
+    },
+    async createTodo(todo) {
+      await this.$store.dispatch('createTodo', todo)
+      this.formOpen = false
+    },
+    async updateTodo(todo) {
+      this.formOpen = false
+      await this.$store.dispatch('editTodo', todo)
+      this.editItem = undefined
+    },
   },
 }
 </script>
