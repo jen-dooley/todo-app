@@ -17,12 +17,7 @@
           {{ item.content }}
         </div>
         <div class="text-caption text--secondary mt-2">
-          <span v-if="item.last_edited > 0">
-            Updated {{ $moment(item.updated).format('LLL') }}</span
-          >
-          <span v-else>
-            Created {{ $moment(item.created).format('LLL') }}
-          </span>
+          {{ timestamp }}
         </div>
       </v-list-item-content>
 
@@ -61,6 +56,14 @@ export default {
     },
     completedClass() {
       return this.itemComplete ? 'text-decoration-line-through' : undefined
+    },
+    timestamp() {
+      const item = this.item
+      if (item.last_edited > 0) {
+        return `Updated ${this.$moment(item.last_edited, 'X').format('LLL')}`
+      } else {
+        return `Created ${this.$moment(item.created, 'X').format('LLL')}`
+      }
     },
   },
   methods: {

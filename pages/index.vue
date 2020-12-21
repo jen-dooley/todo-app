@@ -16,7 +16,14 @@
           <v-spacer></v-spacer>
           <v-dialog v-model="formOpen" width="500">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn fab x-small color="secondary" v-bind="attrs" v-on="on">
+              <v-btn
+                fab
+                x-small
+                color="secondary"
+                aria-label="Create Todo"
+                v-bind="attrs"
+                v-on="on"
+              >
                 <v-icon>mdi-plus</v-icon>
               </v-btn>
             </template>
@@ -39,21 +46,27 @@
           height="10"
         >
         </v-progress-linear>
-        <todo-list :items="filteredItems" @edit-item="openEdit"></todo-list>
+        <v-slide-y-transition class="py-0" group tag="v-list">
+          <todo-item
+            v-for="item in filteredItems"
+            :key="item.id"
+            :item="item"
+            @edit="openEdit"
+          ></todo-item>
+        </v-slide-y-transition>
       </v-card>
     </v-col>
   </v-row>
 </template>
 
 <script>
-import TodoList from '@/components/TodoList'
-import TodoForm from '@/components/TodoForm'
-
 import { mapState, mapGetters } from 'vuex'
+import TodoItem from '@/components/TodoItem'
+import TodoForm from '@/components/TodoForm'
 
 export default {
   name: 'HomePage',
-  components: { TodoForm, TodoList },
+  components: { TodoItem, TodoForm },
   async fetch() {
     await this.$store.dispatch('fetchTodos')
   },
