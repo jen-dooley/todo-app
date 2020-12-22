@@ -14,7 +14,11 @@
             color="white"
           ></v-text-field>
           <v-spacer></v-spacer>
-          <v-dialog v-model="formOpen" width="500">
+          <v-dialog
+            v-model="formOpen"
+            width="500"
+            @click:outside="editItem = null"
+          >
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 small
@@ -27,14 +31,15 @@
                 Create
               </v-btn>
             </template>
-            <v-card v-if="formOpen">
+            <v-card>
               <v-card-title v-text="formTitle" />
               <v-card-text>
                 <todo-form
+                  :key="formKey"
                   :item="editItem"
                   class="mt-3"
-                  @create="createTodo"
                   @update="updateTodo"
+                  @create="createTodo"
                 ></todo-form>
               </v-card-text>
             </v-card>
@@ -80,6 +85,9 @@ export default {
     }
   },
   computed: {
+    formKey() {
+      return this.editItem ? this.editItem.id : 'create-form'
+    },
     filteredItems() {
       if (this.searchValue) {
         return this.todoItems.filter((item) => {
