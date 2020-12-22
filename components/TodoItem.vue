@@ -22,7 +22,10 @@
         </div>
       </v-list-item-content>
       <!-- Min width here is used to prevent text from moving when hovered -->
-      <v-list-item-action class="align-self-baseline" style="min-width: 48px">
+      <v-list-item-action
+        class="align-self-baseline ml-0 ml-sm-3"
+        style="min-width: 48px"
+      >
         <v-tooltip right>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
