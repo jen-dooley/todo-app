@@ -7,11 +7,12 @@
             Todo Items
           </v-toolbar-title>
           <v-text-field
-            v-model="searchValue"
+            :value="searchValue"
             label="Search"
             prepend-icon="mdi-magnify"
             hide-details
             color="white"
+            @input="updateSearchValue"
           ></v-text-field>
           <v-spacer></v-spacer>
           <v-dialog
@@ -24,6 +25,7 @@
                 small
                 color="secondary"
                 aria-label="Create Todo"
+                class="font-weight-bold"
                 v-bind="attrs"
                 v-on="on"
               >
@@ -52,7 +54,7 @@
         >
         </v-progress-linear>
         <v-slide-y-transition group tag="v-list">
-          <template v-for="(item, index) in filteredItems">
+          <template v-for="(item, index) in todoItems">
             <v-divider v-if="index > 0" :key="index" inset></v-divider>
             <todo-item
               :key="item.id"
@@ -81,36 +83,28 @@ export default {
     return {
       editItem: undefined,
       formOpen: false,
-      searchValue: undefined,
     }
   },
   computed: {
     formKey() {
       return this.editItem ? this.editItem.id : 'create-form'
     },
-    filteredItems() {
-      if (this.searchValue) {
-        return this.todoItems.filter((item) => {
-          if (
-            item.title.toLowerCase().includes(this.searchValue.toLowerCase()) ||
-            item.content.toLowerCase().includes(this.searchValue.toLowerCase())
-          ) {
-            return item
-          }
-        })
-      }
-      return this.todoItems
-    },
     formTitle() {
       return this.editItem ? 'Edit Todo' : 'Create Todo'
     },
-    ...mapState({ todoItems: (state) => state.todos }),
-    ...mapGetters(['todoCompletion']),
+    ...mapState({ searchValue: (state) => state.searchValue }),
+    ...mapGetters({
+      todoItems: 'filteredItems',
+      todoCompletion: 'todoCompletion',
+    }),
   },
   methods: {
     openEdit(item) {
       this.editItem = item
       this.formOpen = true
+    },
+    async updateSearchValue(value) {
+      await this.$store.dispatch('updateSearch', value)
     },
     async createTodo(todo) {
       this.formOpen = false

@@ -79,10 +79,11 @@ export default {
         this.$confetti.start({
           particles: [{ type: 'rect' }, { type: 'circle' }],
           defaultColors: ['#3949AB', '#B388FF', '#00796B', '#81C784'],
+          dropRate: 35,
         })
         window.setTimeout(() => {
           this.$confetti.stop()
-        }, 10000)
+        }, 7500)
       }
 
       this.confettiCount += 1

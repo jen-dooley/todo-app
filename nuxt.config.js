@@ -6,12 +6,17 @@ export default {
 
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
-    titleTemplate: '%s - powerspike-project',
-    title: 'powerspike-project',
+    htmlAttrs: { lang: 'en' },
+    title: 'Todo App',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
+      {
+        hid: 'description',
+        name: 'description',
+        content:
+          'The goal of this project is to see how you work by creating a simple to-do application.',
+      },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
@@ -35,7 +40,10 @@ export default {
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
-  modules: ['@nuxtjs/axios'],
+  modules: [
+    '@nuxtjs/axios',
+    ['nuxt-vuex-localstorage', { localStorage: ['localStorage'] }],
+  ],
 
   axios: {
     baseURL: process.env.API_URL,
