@@ -4,6 +4,7 @@
       <v-list-item-action class="align-self-baseline">
         <v-checkbox
           v-model="itemComplete"
+          :aria-label="`Complete Todo - ${item.title}`"
           class="mt-0"
           color="secondary"
         ></v-checkbox>
