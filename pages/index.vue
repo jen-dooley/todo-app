@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center" align="center">
-    <v-col cols="12" sm="8">
+    <v-col cols="12" sm="10" md="8">
       <v-card elevation="3">
         <v-toolbar color="primary" elevation="0" dark>
           <v-toolbar-title v-if="$vuetify.breakpoint.smAndUp" class="mr-6">
@@ -17,17 +17,17 @@
           <v-dialog v-model="formOpen" width="500">
             <template v-slot:activator="{ on, attrs }">
               <v-btn
-                fab
-                x-small
+                small
                 color="secondary"
                 aria-label="Create Todo"
                 v-bind="attrs"
                 v-on="on"
               >
-                <v-icon>mdi-plus</v-icon>
+                <v-icon class="mr-2" small>mdi-plus</v-icon>
+                Create
               </v-btn>
             </template>
-            <v-card>
+            <v-card v-if="formOpen">
               <v-card-title v-text="formTitle" />
               <v-card-text>
                 <todo-form
@@ -46,13 +46,15 @@
           height="10"
         >
         </v-progress-linear>
-        <v-slide-y-transition class="py-0" group tag="v-list">
-          <todo-item
-            v-for="item in filteredItems"
-            :key="item.id"
-            :item="item"
-            @edit="openEdit"
-          ></todo-item>
+        <v-slide-y-transition group tag="v-list">
+          <template v-for="(item, index) in filteredItems">
+            <v-divider v-if="index > 0" :key="index" inset></v-divider>
+            <todo-item
+              :key="item.id"
+              :item="item"
+              @edit="openEdit(item)"
+            ></todo-item>
+          </template>
         </v-slide-y-transition>
       </v-card>
     </v-col>
@@ -103,8 +105,8 @@ export default {
       this.formOpen = true
     },
     async createTodo(todo) {
-      await this.$store.dispatch('createTodo', todo)
       this.formOpen = false
+      await this.$store.dispatch('createTodo', todo)
     },
     async updateTodo(todo) {
       this.formOpen = false

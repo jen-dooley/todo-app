@@ -20,7 +20,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: [],
+  plugins: [{ src: '~/plugins/vue-confetti.js', mode: 'client' }],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -55,14 +55,14 @@ export default {
       dark: false, // set default to light
       themes: {
         light: {
-          primary: colors.indigo.darken1,
-          secondary: colors.deepPurple.accent1,
-          accent: colors.green.lighten2,
+          primary: colors.indigo.darken1, // #3949AB
+          secondary: colors.deepPurple.accent1, // #B388FF
+          accent: colors.green.lighten2, // #81C784
         },
         dark: {
-          primary: colors.teal.darken2,
-          secondary: colors.green.lighten2,
-          accent: colors.deepPurple.accent1,
+          primary: colors.teal.darken2, // #00796B
+          secondary: colors.green.lighten2, // #81C784
+          accent: colors.deepPurple.accent1, // #B388FF
         },
       },
     },

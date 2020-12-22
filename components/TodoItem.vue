@@ -20,20 +20,36 @@
           {{ timestamp }}
         </div>
       </v-list-item-content>
-
-      <v-list-item-action v-show="hover" class="align-self-baseline">
-        <v-btn
-          icon
-          :aria-label="`Edit Todo - ${item.title}`"
-          @click="$emit('edit')"
-          ><v-icon>mdi-pencil</v-icon></v-btn
-        >
-        <v-btn
-          icon
-          :aria-label="`Remove Todo - ${item.title}`"
-          @click="deleteTodo"
-          ><v-icon>mdi-close</v-icon></v-btn
-        >
+      <!-- Min width here is used to prevent text from moving when hovered -->
+      <v-list-item-action class="align-self-baseline" style="min-width: 48px">
+        <v-tooltip right>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              v-show="hover"
+              icon
+              :aria-label="`Edit Todo - ${item.title}`"
+              v-bind="attrs"
+              v-on="on"
+              @click="$emit('edit')"
+              ><v-icon>mdi-pencil</v-icon></v-btn
+            >
+          </template>
+          <span>Edit</span>
+        </v-tooltip>
+        <v-tooltip right>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              v-show="hover"
+              icon
+              :aria-label="`Remove Todo - ${item.title}`"
+              v-bind="attrs"
+              v-on="on"
+              @click="deleteTodo"
+              ><v-icon>mdi-close</v-icon></v-btn
+            >
+          </template>
+          <span>Remove</span>
+        </v-tooltip>
       </v-list-item-action>
     </v-list-item>
   </v-hover>
@@ -46,6 +62,7 @@ export default {
     item: { type: Object, required: true },
   },
   computed: {
+    // Used a computed item here so I can use v-model on the value
     itemComplete: {
       get() {
         return this.item.complete
@@ -59,6 +76,8 @@ export default {
     },
     timestamp() {
       const item = this.item
+
+      // Dates are in unix seconds format instead of iso so we need to tell moment
       if (item.last_edited > 0) {
         return `Updated ${this.$moment(item.last_edited, 'X').format('LLL')}`
       } else {
@@ -68,10 +87,13 @@ export default {
   },
   methods: {
     async toggleTodo(value) {
-      await this.$store.dispatch('toggleTodo', {
+      const { celebrate } = await this.$store.dispatch('toggleTodo', {
         todo: this.item,
         value,
       })
+      if (celebrate) {
+        this.$root.$emit('celebrate')
+      }
     },
     async deleteTodo() {
       await this.$store.dispatch('deleteTodo', this.item)

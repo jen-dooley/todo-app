@@ -54,8 +54,9 @@ export const actions = {
     await this.$axios.$delete(`/${todo.id}`)
     commit('REMOVE_TODO', todo)
   },
-  toggleTodo({ commit }, { todo, value }) {
+  toggleTodo({ commit, getters }, { todo, value }) {
     commit('UPDATE_TODO', { ...todo, complete: value })
+    return { celebrate: getters.todoCompletion === 100 }
   },
 }
 

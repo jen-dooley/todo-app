@@ -1,13 +1,26 @@
 <template>
   <v-app>
     <v-app-bar app elevation="3" color="primary" dark>
-      <v-toolbar-title>
+      <v-toolbar-title @click="celebrate">
         PowerSpike<span v-show="$vuetify.breakpoint.smAndUp">
           Code Challenge</span
         >: To-do App
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-spacer></v-spacer>
+      <v-dialog v-model="showProjectInfo" width="500">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            icon
+            class="mr-3"
+            aria-label="Project Brief"
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon>mdi-information</v-icon>
+          </v-btn>
+        </template>
+        <project-brief @close="showProjectInfo = false"></project-brief>
+      </v-dialog>
       <v-switch
         v-model="$vuetify.theme.dark"
         inset
@@ -25,10 +38,16 @@
 </template>
 
 <script>
+import ProjectBrief from '@/components/ProjectBrief'
+
 export default {
   name: 'DefaultLayout',
+  components: { ProjectBrief },
   data() {
-    return {}
+    return {
+      confettiCount: 0,
+      showProjectInfo: false,
+    }
   },
   computed: {
     backgroundColor() {
@@ -38,6 +57,8 @@ export default {
   mounted() {
     // Check what user theme preference is
     this.initDarkMode()
+    // Listen for celebration from todoItem
+    this.$root.$on('celebrate', this.celebrate)
   },
   methods: {
     initDarkMode() {
@@ -51,6 +72,20 @@ export default {
         // need to set 0 sec timeout to set the dark more after mounted event, due to some bug in the framework
         setTimeout(() => (this.$vuetify.theme.dark = true), 0)
       }
+    },
+    celebrate() {
+      // Restrict the number of times we throw confetti, the library has a bit of a memory leak if we do it too many times.
+      if (this.confettiCount < 4) {
+        this.$confetti.start({
+          particles: [{ type: 'rect' }, { type: 'circle' }],
+          defaultColors: ['#3949AB', '#B388FF', '#00796B', '#81C784'],
+        })
+        window.setTimeout(() => {
+          this.$confetti.stop()
+        }, 10000)
+      }
+
+      this.confettiCount += 1
     },
   },
 }
