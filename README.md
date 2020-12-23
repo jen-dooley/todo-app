@@ -1,7 +1,5 @@
 # PowerSpike Code Challenge: Todo App
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/079aa890-c257-4c52-9dd6-a0e469cfe93c/deploy-status)](https://romantic-banach-500938.netlify.app)
-
 ## Project Steps
 
 #### Setup Development Environment
@@ -35,13 +33,11 @@ As an added benefit this also allowed me to simplify many of my components and r
 
 For flair, I added the light/dark themes, a background pattern from [Hero Patterns](https://www.heropatterns.com/), search functionality and completion confetti.
 
-#### Deploy
-
-I have deployed this application to Netlify as well, and it can be viewed [here](https://romantic-banach-500938.netlify.app/).
-
 #### Notes
 
 I did not end up writing testing for this application since I got way too excited at the beginning, I ended up testing everything manually.
+
+In hind-sight I would use Vue instead of Nuxt if I were to start this project over.
 
 In total, I built this application in about 12 hours of work time.
 
@@ -55,7 +51,8 @@ $ cp .env.example .env
 $ npm install
 
 # build and launch project
-$ npm run generate
+$ npm run build
+$ npm run start
 ```
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).

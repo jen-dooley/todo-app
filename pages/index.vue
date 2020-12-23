@@ -69,8 +69,8 @@ import TodoForm from '@/components/TodoForm'
 export default {
   name: 'HomePage',
   components: { TodoItem, TodoForm },
-  async fetch() {
-    await this.$store.dispatch('fetchTodos')
+  async fetch({ store }) {
+    await store.dispatch('fetchTodos')
   },
   data() {
     return {
