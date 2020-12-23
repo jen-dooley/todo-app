@@ -55,8 +55,7 @@ $ cp .env.example .env
 $ npm install
 
 # build and launch project
-$ npm run build
-$ npm run start
+$ npm run generate
 ```
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
