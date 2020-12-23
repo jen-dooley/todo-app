@@ -4,6 +4,10 @@ export default {
   // Target (https://go.nuxtjs.dev/config-target)
   target: 'server',
 
+  generate: {
+    fallback: true,
+  },
+
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
     htmlAttrs: { lang: 'en' },
