@@ -1,7 +1,5 @@
 # PowerSpike Code Challenge: Todo App
 
-## Project Steps
-
 #### Setup Development Environment
 
 This application is created in Nuxt.js, Vuetify and a few small packages. I chose Nuxt.js because it is allows me to get a project going quickly. I decided to use Vuetify for this project because it is what is used at PowerSpike.
