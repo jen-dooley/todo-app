@@ -1,6 +1,6 @@
 <template>
   <v-hover v-slot="{ hover }">
-    <v-list-item class="align-baseline">
+    <v-list-item>
       <v-list-item-action class="align-self-baseline">
         <v-checkbox
           v-model="itemComplete"
@@ -23,7 +23,7 @@
       </v-list-item-content>
       <!-- Min width here is used to prevent text from moving when hovered -->
       <v-list-item-action
-        class="align-self-baseline ml-0 ml-sm-3"
+        class="align-self-baseline ml-0 ml-sm-3 my-0"
         style="min-width: 48px"
       >
         <v-tooltip right>

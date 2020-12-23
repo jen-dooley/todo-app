@@ -33,18 +33,11 @@
                 Create
               </v-btn>
             </template>
-            <v-card>
-              <v-card-title v-text="formTitle" />
-              <v-card-text>
-                <todo-form
-                  :key="formKey"
-                  :item="editItem"
-                  class="mt-3"
-                  @update="updateTodo"
-                  @create="createTodo"
-                ></todo-form>
-              </v-card-text>
-            </v-card>
+            <todo-form
+              :key="formKey"
+              :item="editItem"
+              @close="closeForm"
+            ></todo-form>
           </v-dialog>
         </v-toolbar>
         <v-progress-linear
@@ -59,7 +52,7 @@
             <todo-item
               :key="item.id"
               :item="item"
-              @edit="openEdit(item)"
+              @edit="openForm(item)"
             ></todo-item>
           </template>
         </v-slide-y-transition>
@@ -89,9 +82,6 @@ export default {
     formKey() {
       return this.editItem ? this.editItem.id : 'create-form'
     },
-    formTitle() {
-      return this.editItem ? 'Edit Todo' : 'Create Todo'
-    },
     ...mapState({ searchValue: (state) => state.searchValue }),
     ...mapGetters({
       todoItems: 'filteredItems',
@@ -99,21 +89,16 @@ export default {
     }),
   },
   methods: {
-    openEdit(item) {
+    openForm(item) {
       this.editItem = item
       this.formOpen = true
     },
+    closeForm() {
+      this.editItem = undefined
+      this.formOpen = false
+    },
     async updateSearchValue(value) {
       await this.$store.dispatch('updateSearch', value)
-    },
-    async createTodo(todo) {
-      this.formOpen = false
-      await this.$store.dispatch('createTodo', todo)
-    },
-    async updateTodo(todo) {
-      this.formOpen = false
-      await this.$store.dispatch('editTodo', todo)
-      this.editItem = undefined
     },
   },
 }

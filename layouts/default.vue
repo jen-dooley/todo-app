@@ -6,21 +6,24 @@
           Code Challenge</span
         >: To-do App
       </v-toolbar-title>
-      <v-spacer></v-spacer>
       <v-dialog v-model="showProjectInfo" width="500">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            icon
-            class="mr-3"
-            aria-label="Project Brief"
-            v-bind="attrs"
-            v-on="on"
-          >
+          <v-btn icon aria-label="Project Brief" v-bind="attrs" v-on="on">
             <v-icon>mdi-information</v-icon>
           </v-btn>
         </template>
         <project-brief @close="showProjectInfo = false"></project-brief>
       </v-dialog>
+      <v-spacer></v-spacer>
+      <v-btn
+        icon
+        class="mr-2"
+        aria-label="Github Repo"
+        href="https://github.com/StattikRose/powerspike-project"
+        target="_blank"
+      >
+        <v-icon>mdi-github</v-icon>
+      </v-btn>
       <v-switch
         v-model="$vuetify.theme.dark"
         inset
