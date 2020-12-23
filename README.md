@@ -6,7 +6,7 @@
 
 #### Setup Development Environment
 
-This application is created in Nuxt.js, Vuetify and a few small packages. I chose Nuxt.js because it is allows me to get a project going quickly, and it allows me to generate a static project for faster load times when deployed. I decided to use Vuetify for this project because it is what is used at PowerSpike.
+This application is created in Nuxt.js, Vuetify and a few small packages. I chose Nuxt.js because it is allows me to get a project going quickly. I decided to use Vuetify for this project because it is what is used at PowerSpike.
 
 Additional packages used are vue-luxon for datetime display, nuxt-vuex-localstorage for localStorage since Nuxt prevents normal `window.localStorage`, and vue-confetti for flair.
 
@@ -54,8 +54,8 @@ $ cp .env.example .env
 # install dependencies
 $ npm install
 
-# generate static project and launch project
-$ npm run generate
+# build and launch project
+$ npm run build
 $ npm run start
 ```
 
